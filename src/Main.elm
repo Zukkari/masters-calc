@@ -1,15 +1,18 @@
-module Main exposing (..)
+module Main exposing (main)
 
-import Html exposing (..)
-import Html.Attributes exposing (placeholder, style)
-import Html.Events exposing (onClick, onInput)
+import Css exposing (..)
+import Html
+import Html.Styled exposing (..)
+import Html.Styled.Attributes exposing (css, href, placeholder, src)
+import Html.Styled.Events exposing (onClick, onInput)
 import MessageUpdate exposing (Model, updateScore, positiveMsg)
 import String exposing (toInt)
 import Json.Decode as Decode
+import Styles exposing (inputField, mainDiv, msgDiv)
 
 
 main =
-    Html.program { init = init, view = view, update = update, subscriptions = subscriptions }
+    Html.program { init = init, view = view >> toUnstyled, update = update, subscriptions = subscriptions }
 
 
 
@@ -39,7 +42,7 @@ update msg model =
                 converted =
                     case String.toFloat newGPA of
                         Err msg ->
-                            model.gpa
+                            0.0
 
                         Ok value ->
                             if (value <= model.maxGrade) then
@@ -57,7 +60,7 @@ update msg model =
                 newValue =
                     case toInt newPoints of
                         Err _ ->
-                            model.points
+                            0
 
                         Ok val ->
                             if (val <= 100) then
@@ -80,11 +83,10 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ div [] [ formMessage model ]
-        , div [] [ formInputField "Enter your GPA e.g. 5.0" UpdateGPA ]
+    mainDiv []
+        [ msgDiv [] [ formMessage model ]
+        , div [] [ formInputField "Enter your GPA" UpdateGPA ]
         , div [] [ formInputField "Enter score for motivation letter" UpdatePoints ]
-        , button [ onClick UpdateMessage ] [ text "Calculate score!" ]
         ]
 
 
@@ -96,7 +98,7 @@ formMessage model =
     in
         if msg /= "" && model.score > 0 && model.gpa > 0.0 && model.points > 0 then
             div []
-                [ div [ style [ ( "color", msgColor msg ) ] ] [ text model.message ]
+                [ div [] [ text model.message ]
                 , formDetailedMsg model
                 ]
         else
@@ -115,7 +117,7 @@ formDetailedMsg model =
 
 
 formInputField dummy action =
-    input [ placeholder dummy, onInput action ] []
+    inputField [ placeholder dummy, onInput action ] []
 
 
 msgColor : String -> String
