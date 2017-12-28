@@ -24,6 +24,10 @@ updateScore model =
         { updatedModel | score = sc }
 
 
+positiveMsg =
+    "You are good to go!"
+
+
 updateMsg : Model -> Model
 updateMsg model =
     let
@@ -37,10 +41,10 @@ updateMsg model =
             if (model.points < model.passingPoints) then
                 "You need to have " ++ toString points ++ " points or more for motivation letter in order to pass"
             else if (nonScaledGPA < points) then
-                "Your GPA needs to be at least" ++ toString ((points / 100) * model.maxGrade) ++ " in order to get admitted"
+                "Your GPA needs to be at least " ++ toString ((points / 100) * model.maxGrade) ++ " in order to get admitted"
             else if (model.score < model.minimumAllowedScore) then
                 "You need at least " ++ toString model.minimumAllowedScore ++ " points in total in order to get admitted"
             else
-                "You are good to go!"
+                positiveMsg
     in
         { model | message = msg }
