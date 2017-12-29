@@ -33,7 +33,7 @@ mainDiv =
 
 msgDiv =
     styled div
-        [ paddingTop (vh 25)
+        [ paddingTop (vh 20)
         , paddingBottom (vh 5)
         , Css.width (vh 60)
         , margin auto
@@ -50,7 +50,6 @@ inputDiv =
         , borderStyle solid
         , borderColor (hex ("#ffffff"))
         , borderRadius (px 7)
-        , padding (px 20)
         ]
 
 
@@ -82,6 +81,20 @@ scoreMsg positive =
             , backgroundColor (hex bgColor)
             , Css.height (vh 8)
             ]
+
+
+configDiv =
+    styled div
+        [ margin auto
+        , Css.width (vh 50)
+        , marginTop (vh 3)
+        , borderWidth (px 1)
+        , borderStyle solid
+        , borderColor (hex ("#ffffff"))
+        , borderRadius (px 7)
+        , color (hex "#ffffff")
+        , fontFamilies [ "Source Sans Pro", "Trebuchet MS", "Lucida Grande", "Bitstream Vera Sans", "Helvetica Neue", "sans-serif" ]
+        ]
 
 
 infoDiv pos =

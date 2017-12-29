@@ -9,6 +9,8 @@ type alias Model =
     , maxGrade : Float
     , passingPoints : Int
     , minimumAllowedScore : Int
+    , letterWeight : Int
+    , gpaWeight : Int
     , positive : Bool
     }
 
@@ -17,7 +19,13 @@ updateScore : Model -> Model
 updateScore model =
     let
         sc =
-            round ((model.gpa / 5) * 100 * 0.6 + (toFloat model.points) * 0.4)
+            round
+                ((model.gpa / 5)
+                    * 100
+                    * (toFloat model.gpaWeight / 100)
+                    + (toFloat model.points)
+                    * (toFloat model.letterWeight / 100)
+                )
 
         updatedModel =
             updateMsg { model | score = sc }

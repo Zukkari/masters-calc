@@ -2,13 +2,12 @@ module Main exposing (main)
 
 import Css exposing (..)
 import Html
-import Html.Attributes exposing (style)
 import Html.Styled exposing (..)
-import Html.Styled.Attributes exposing (css, href, placeholder, src)
+import Html.Styled.Attributes exposing (css, href, placeholder, value, src)
 import Html.Styled.Events exposing (onClick, onInput)
 import MessageUpdate exposing (Model, updateScore)
 import String exposing (toInt)
-import Styles exposing (dummyDiv, infoDiv, inputDiv, inputField, mainDiv, msgDiv, resultMsg, scoreMsg, textBox, textBoxDummy)
+import Styles exposing (configDiv, dummyDiv, infoDiv, inputDiv, inputField, mainDiv, msgDiv, resultMsg, scoreMsg, textBox, textBoxDummy)
 
 
 main =
@@ -21,7 +20,7 @@ main =
 
 init : ( Model, Cmd Msg )
 init =
-    ( Model 0.0 0 "" 0 5.0 51 66 False, Cmd.none )
+    ( Model 0.0 0 "" 0 5.0 51 66 40 60 False, Cmd.none )
 
 
 
@@ -32,6 +31,8 @@ type Msg
     = UpdateGPA String
     | UpdatePoints String
     | UpdateMessage
+    | UpdateLetterWeight String
+    | UpdateGPAWeight String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -40,41 +41,87 @@ update msg model =
         UpdateGPA newGPA ->
             let
                 converted =
-                    case String.toFloat newGPA of
-                        Err msg ->
-                            0.0
+                    parseFloat newGPA 0.0
 
-                        Ok value ->
-                            if (value <= model.maxGrade) then
-                                value
-                            else
-                                model.maxGrade
+                res =
+                    if (converted <= model.maxGrade) then
+                        converted
+                    else
+                        model.maxGrade
 
                 updatedModel =
-                    { model | gpa = converted }
+                    { model | gpa = res }
             in
                 update UpdateMessage updatedModel
 
         UpdatePoints newPoints ->
             let
                 newValue =
-                    case toInt newPoints of
-                        Err _ ->
-                            0
+                    parseInt newPoints 0
 
-                        Ok val ->
-                            if (val <= 100) then
-                                val
-                            else
-                                100
+                res =
+                    if (newValue <= 100) then
+                        newValue
+                    else
+                        100
 
                 updatedModel =
-                    { model | points = newValue }
+                    { model | points = res }
             in
                 update UpdateMessage updatedModel
 
+        UpdateLetterWeight w ->
+            let
+                newValue =
+                    parseInt w 0
+
+                corr =
+                    if (newValue > 100) then
+                        100
+                    else if (newValue < 0) then
+                        0
+                    else
+                        newValue
+            in
+                update UpdateMessage { model | letterWeight = corr, gpaWeight = 100 - corr }
+
+        UpdateGPAWeight w ->
+            let
+                newValue =
+                    parseInt w 0
+
+                corr =
+                    if (newValue > 100) then
+                        100
+                    else if (newValue < 0) then
+                        0
+                    else
+                        newValue
+            in
+                update UpdateMessage { model | gpaWeight = corr, letterWeight = 100 - corr }
+
         UpdateMessage ->
             ( updateScore model, Cmd.none )
+
+
+parseInt : String -> Int -> Int
+parseInt str err =
+    case toInt str of
+        Err _ ->
+            err
+
+        Ok val ->
+            val
+
+
+parseFloat : String -> Float -> Float
+parseFloat str err =
+    case String.toFloat str of
+        Err msg ->
+            err
+
+        Ok value ->
+            value
 
 
 
@@ -88,6 +135,25 @@ view model =
         , inputDiv []
             [ div [] [ formInputField "Enter your GPA" UpdateGPA ]
             , div [] [ formInputField "Enter score for motivation letter" UpdatePoints ]
+            ]
+        , formConfigDiv model
+        ]
+
+
+formConfigDiv : Model -> Html Msg
+formConfigDiv model =
+    configDiv []
+        [ div []
+            [ text "GPA weight (%)"
+            , formInputFieldWithDefault (toString model.gpaWeight)
+                "Enter GPA weight"
+                UpdateGPAWeight
+            ]
+        , div []
+            [ text "Letter weight (%)"
+            , formInputFieldWithDefault (toString model.letterWeight)
+                "Enter letter weight"
+                UpdateLetterWeight
             ]
         ]
 
@@ -128,6 +194,10 @@ formDetailedMsg model =
 
 formInputField dummy action =
     inputField [ placeholder dummy, onInput action ] []
+
+
+formInputFieldWithDefault default dummy action =
+    inputField [ value default, placeholder dummy, onInput action ] []
 
 
 msgColor : Bool -> String
