@@ -3,6 +3,7 @@
     "summary": "Master's programmes admission calculator in University of Tartu",
     "repository": "https://github.com/user/project.git",
     "license": "BSD3",
+    "homepage" : "https://zukkari.github.io/masters-calc ",
     "source-directories": [
         "src"
     ],
