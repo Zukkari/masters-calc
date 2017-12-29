@@ -8,9 +8,7 @@ This application is written using [Elm](http://elm-lang.org/).
 University of Tartu admission rules can be found [here](https://software.cs.ut.ee/admission/)
 
 ## Demo
-Demo can be found on Github Pages:
-
-```https://zukkari.github.io/masters-calc/build/index.html```
+Demo can be found on [Github Pages](https://zukkari.github.io/masters-calc/)
 
 ## Usage
 Into the first box enter your GPA: ```0.0 - 5.0```
