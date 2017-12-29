@@ -9,6 +9,7 @@ type alias Model =
     , maxGrade : Float
     , passingPoints : Int
     , minimumAllowedScore : Int
+    , positive : Bool
     }
 
 
@@ -24,10 +25,6 @@ updateScore model =
         { updatedModel | score = sc }
 
 
-positiveMsg =
-    "You are good to go!"
-
-
 updateMsg : Model -> Model
 updateMsg model =
     let
@@ -37,14 +34,14 @@ updateMsg model =
         points =
             toFloat model.passingPoints
 
-        msg =
+        ( msg, feedBack ) =
             if (model.points < model.passingPoints) then
-                "You need to have " ++ toString points ++ " points or more for motivation letter in order to pass"
+                ( "You need to have >= " ++ toString points ++ " points for motivation letter in order to pass", False )
             else if (nonScaledGPA < points) then
-                "Your GPA needs to be at least " ++ toString ((points / 100) * model.maxGrade) ++ " in order to get admitted"
+                ( "Your GPA has to be at least " ++ toString ((points / 100) * model.maxGrade) ++ " in order to get admitted", False )
             else if (model.score < model.minimumAllowedScore) then
-                "You need at least " ++ toString model.minimumAllowedScore ++ " points in total in order to get admitted"
+                ( "You need at least " ++ toString model.minimumAllowedScore ++ " points in total in order to get admitted", False )
             else
-                positiveMsg
+                ( "You are good to go!", True )
     in
-        { model | message = msg }
+        { model | message = msg, positive = feedBack }

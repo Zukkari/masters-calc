@@ -2,13 +2,13 @@ module Main exposing (main)
 
 import Css exposing (..)
 import Html
+import Html.Attributes exposing (style)
 import Html.Styled exposing (..)
 import Html.Styled.Attributes exposing (css, href, placeholder, src)
 import Html.Styled.Events exposing (onClick, onInput)
-import MessageUpdate exposing (Model, updateScore, positiveMsg)
+import MessageUpdate exposing (Model, updateScore)
 import String exposing (toInt)
-import Json.Decode as Decode
-import Styles exposing (inputField, mainDiv, msgDiv)
+import Styles exposing (dummyDiv, infoDiv, inputDiv, inputField, mainDiv, msgDiv, resultMsg, scoreMsg, textBox, textBoxDummy)
 
 
 main =
@@ -21,7 +21,7 @@ main =
 
 init : ( Model, Cmd Msg )
 init =
-    ( Model 0.0 0 "" 0 5.0 51 66, Cmd.none )
+    ( Model 0.0 0 "" 0 5.0 51 66 False, Cmd.none )
 
 
 
@@ -85,8 +85,10 @@ view : Model -> Html Msg
 view model =
     mainDiv []
         [ msgDiv [] [ formMessage model ]
-        , div [] [ formInputField "Enter your GPA" UpdateGPA ]
-        , div [] [ formInputField "Enter score for motivation letter" UpdatePoints ]
+        , inputDiv []
+            [ div [] [ formInputField "Enter your GPA" UpdateGPA ]
+            , div [] [ formInputField "Enter score for motivation letter" UpdatePoints ]
+            ]
         ]
 
 
@@ -97,17 +99,25 @@ formMessage model =
             model.message
     in
         if msg /= "" && model.score > 0 && model.gpa > 0.0 && model.points > 0 then
-            div []
-                [ div [] [ text model.message ]
+            textBox model.positive
+                []
+                [ resultMsg model.positive
+                    []
+                    [ text model.message ]
+                , scoreMsg
+                    model.positive
+                    []
+                    [ text (toString model.score) ]
                 , formDetailedMsg model
                 ]
         else
-            div [] []
+            textBoxDummy [] [ dummyDiv [] [ text "Enter something!" ] ]
 
 
 formDetailedMsg : Model -> Html Msg
 formDetailedMsg model =
-    div []
+    infoDiv model.positive
+        []
         [ div [] [ text ("Your GPA is " ++ toString model.gpa ++ " out of " ++ toString model.maxGrade) ]
         , div [] [ text ("Your motivation letter score is " ++ toString model.points ++ " out of possible 100") ]
         , div []
@@ -120,9 +130,9 @@ formInputField dummy action =
     inputField [ placeholder dummy, onInput action ] []
 
 
-msgColor : String -> String
+msgColor : Bool -> String
 msgColor msg =
-    if msg == positiveMsg then
+    if msg then
         "green"
     else
         "red"
