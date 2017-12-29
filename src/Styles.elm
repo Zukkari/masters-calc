@@ -20,6 +20,7 @@ inputField =
         , fontSize (px 20)
         , borderColor (hex "#ffffff")
         , borderWidth (px 2)
+        , Css.width (vh 40)
         ]
 
 
@@ -44,7 +45,7 @@ msgDiv =
 inputDiv =
     styled div
         [ margin auto
-        , Css.width (vh 40)
+        , Css.width (vh 60)
         , marginTop (vh 25)
         , borderWidth (px 1)
         , borderStyle solid
@@ -86,7 +87,7 @@ scoreMsg positive =
 configDiv =
     styled div
         [ margin auto
-        , Css.width (vh 50)
+        , Css.width (vh 60)
         , marginTop (vh 3)
         , borderWidth (px 1)
         , borderStyle solid
