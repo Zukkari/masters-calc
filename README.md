@@ -9,10 +9,12 @@ University of Tartu admission rules can be found [here](https://software.cs.ut.e
 
 ## Demo
 Demo can be found on Github Pages:
+
 ```https://zukkari.github.io/masters-calc/build/index.html```
 
 ## Usage
 Into the first box enter your GPA: ```0.0 - 5.0```
+
 Into the second box enter points you got (or imagine you will get) for your motivation letter: ```0-100```
 
 Bottom boxes can be used to configure your weights if they are not 60% and 40%.
