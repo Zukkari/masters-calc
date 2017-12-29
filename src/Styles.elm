@@ -65,7 +65,7 @@ resultMsg positive =
             , fontSize (px 25)
             , color (hex textColor)
             , backgroundColor (hex bgColor)
-            , Css.height (vh 10)
+            , Css.height (vh 8)
             ]
 
 
@@ -80,7 +80,7 @@ scoreMsg positive =
             , fontSize (px 50)
             , color (hex textColor)
             , backgroundColor (hex bgColor)
-            , Css.height (vh 10)
+            , Css.height (vh 8)
             ]
 
 
@@ -120,7 +120,7 @@ textBox positive =
         styled div
             [ borderWidth (px 1)
             , borderColor (hex (textColor))
-            , fontFamilies [ "monospace" ]
+            , fontFamilies [ "Source Sans Pro", "Trebuchet MS", "Lucida Grande", "Bitstream Vera Sans", "Helvetica Neue", "sans-serif" ]
             , borderStyle solid
             , Css.height (vh 30)
             , padding (px 20)
@@ -134,7 +134,7 @@ textBoxDummy =
         [ borderWidth (px 1)
         , borderColor (hex "#ffffff")
         , color (hex "#ffffff")
-        , fontFamilies [ "monospace" ]
+        , fontFamilies [ "Source Sans Pro", "Trebuchet MS", "Lucida Grande", "Bitstream Vera Sans", "Helvetica Neue", "sans-serif" ]
         , borderStyle solid
         , Css.height (vh 30)
         , padding (px 20)
